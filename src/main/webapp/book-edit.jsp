@@ -10,25 +10,7 @@
 <head>
 <meta charset="UTF-8">
 <title>書籍編集</title>
-<style>
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-table, th, td {
-    border: 1px solid black;
-}
-
-th, td {
-    padding: 8px;
-    text-align: left;
-}
-
-th {
-    background-color: #f2f2f2;
-}
-</style>
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
@@ -64,9 +46,75 @@ th {
 	    
 	    <input type="hidden" name="jan" value="<%=book.getJAN_CODE() %>">
 	    
+	    <div class="content-container">
 	    <button type="submit">変更する</button>
+		<button id="deleteButton">削除する</button><br>
+		</div>
 	</form>
+	
+	<div class="back">
+	<a href="BookListServlet">一覧に戻る</a>
+	</div>
+	
+	<% String isbnError = (String)request.getSession().getAttribute("isbnError"); %>
+	<% String priceError = (String)request.getSession().getAttribute("priceError"); %>
+	<% String bookNameError = (String)request.getSession().getAttribute("bookNameError"); %>
+	<% String bookKanaError = (String)request.getSession().getAttribute("bookKanaError"); %>
+	<% if(isbnError != null) { %>
+	<p><%=isbnError %></p>
+	<% session.removeAttribute("isbnError"); %>
+	<% } else if(priceError != null) { %>
+	<p><%=priceError %></p>
+	<% session.removeAttribute("priceError"); %>
+	<% } else if(bookNameError != null) { %>
+	<p><%=bookNameError %></p>
+	<% session.removeAttribute("bookNameError"); %>
+	<% } else if(bookKanaError != null) { %>
+	<p><%=bookKanaError %></p>
+	<% session.removeAttribute("bookKanaError"); %>
+	<% } %>
 <% } %>
 
+	<!-- モーダル -->
+	<div id="myModal" class="modal">
+	    <!-- モーダルコンテンツ -->
+	    <div class="modal-content">
+	        <span class="close">&times;</span>
+	        <p>本当に削除しますか？</p>
+	        <form action="BookDeleteServlet" method="post">
+				<input type="hidden" name="jan" value="<%=book.getJAN_CODE() %>">
+				<button type="button" id="cancelButton">キャンセル</button>
+				<button type="submit">削除する</button>
+	        </form>
+	    </div>
+	</div>
+	
+<script>
+//キャンセルボタン
+document.getElementById('cancelButton').addEventListener('click', function() {
+    document.getElementById('myModal').style.display = 'none';
+});
+
+// 削除ボタン
+document.getElementById('deleteButton').addEventListener('click', function(event) {
+    event.preventDefault();  // デフォルトのフォーム送信を防止
+    document.getElementById('myModal').style.display = 'block';
+});
+
+
+// 閉じるボタン（x）
+var span = document.getElementsByClassName("close")[0];
+span.onclick = function() {
+    document.getElementById('myModal').style.display = "none";
+}
+
+// モーダルの外側をクリックした時にモーダルを閉じる
+window.onclick = function(event) {
+    var modal = document.getElementById("myModal");
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+</script>
 </body>
 </html>

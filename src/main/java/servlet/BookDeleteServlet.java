@@ -2,8 +2,6 @@ package servlet;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -11,26 +9,26 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.dao.BookDAO;
-import model.dto.BookDTO;
 
-@WebServlet("/BookListServlet")
-public class BookListServlet extends HttpServlet {
+@WebServlet("/BookDeleteServlet")
+public class BookDeleteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-  
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+   
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
 		
-		request.getSession().setMaxInactiveInterval(30);
-		
-		List<BookDTO> bookList = new ArrayList<>();
-		BookDAO bDao = new BookDAO();
 		try {
-			bookList = bDao.getAllBooks();
-			if(bookList == null || bookList.isEmpty()) {
-				request.setAttribute("error", "エラー");
+			BookDAO bDao = new BookDAO();
+			
+			String jan = request.getParameter("jan");
+			
+			int row = bDao.deleteBook(jan);
+			if (row != 1) {
+				request.getSession().setAttribute("deleteError", "削除に失敗しました。");
+				response.sendRedirect("BookEditServlet?jan=" + jan);
+				return;
 			} else {
-				request.setAttribute("bookList", bookList);
+				response.sendRedirect("BookListServlet");
 			}
 		} catch(ClassNotFoundException e) {
 			e.printStackTrace();
@@ -48,15 +46,6 @@ public class BookListServlet extends HttpServlet {
 	        response.sendRedirect("error.jsp");
 	        return;
 		}
-		
-		request.getRequestDispatcher("book-list.jsp").forward(request, response);
-		
-	}
-
-	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException {
-		
 	}
 
 }
