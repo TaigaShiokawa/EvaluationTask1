@@ -51,17 +51,17 @@ public class BookExportServlet extends HttpServlet {
         try (PrintWriter writer = new PrintWriter(new File(filePath))) {
             StringBuilder sb = new StringBuilder();
             
-            sb.append("JANコード,ISBNコード,書籍名,書籍名カナ,価格,発行日,登録日時,更新日時\n");
+            sb.append("\"JANコード\",\"ISBNコード\",\"書籍名\",\"書籍名カナ\",\"価格\",\"発行日\",\"登録日時\",\"更新日時\"\n");
             
             for (BookDTO book : bookList) {
-                sb.append(book.getJAN_CODE()).append(",");
-                sb.append(book.getISBN_CODE()).append(",");
-                sb.append(book.getBOOK_NAME()).append(",");
-                sb.append(book.getBOOK_KANA_NM()).append(",");
-                sb.append(book.getPRICE()).append(",");
-                sb.append(book.getISSUE_DATE()).append(",");
-                sb.append(book.getCREATE_DATETIME()).append(",");
-                sb.append(book.getUPDATE_DATETIME()).append("\n");
+                sb.append("\"").append(book.getJAN_CODE()).append("\",");
+                sb.append("\"").append(book.getISBN_CODE()).append("\",");
+                sb.append("\"").append(book.getBOOK_NAME()).append("\",");
+                sb.append("\"").append(book.getBOOK_KANA_NM()).append("\",");
+                sb.append("\"").append(book.getPRICE()).append("\",");
+                sb.append("\"").append(book.getISSUE_DATE()).append("\",");
+                sb.append("\"").append(book.getCREATE_DATETIME()).append("\",");
+                sb.append("\"").append(book.getUPDATE_DATETIME()).append("\"\n");
             }
 
             writer.write(sb.toString());
