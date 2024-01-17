@@ -87,65 +87,64 @@ function goToBookDetail(janCode) {
 	    <button type="submit">登録する</button>
     </form>
 
-<% List<BookDTO> bookList = (List<BookDTO>)request.getAttribute("bookList"); %>
-<% String error = (String)request.getAttribute("error"); %>
-<% String notFound = (String)request.getAttribute("notFound"); %>
-<% if(notFound != null) { %>
-<p><%=notFound %></p>
-<% } else if(bookList == null || bookList.isEmpty()) { %>
-<p><%=error %></p>
-<% } else { %>
-	<table>
-        <tr>
-            <th>JANコード</th>
-            <th>ISBNコード</th>
-            <th>書籍名</th>
-            <th>書籍名カナ</th>
-            <th>価格</th>
-            <th>発行日</th>
-            <th>登録日時</th>
-            <th>更新日時</th>
-        </tr>
-        <% for(BookDTO book : bookList) { %>
-        <tr onclick="goToBookDetail('<%=book.getJAN_CODE()%>')">
-            <td><%=book.getJAN_CODE() %></td>
-            <td><%=book.getISBN_CODE() %></td>
-            <td><%=book.getBOOK_NAME() %></td>
-            <td><%=book.getBOOK_KANA_NM() %></td>
-            <% 
-            NumberFormat formatter = NumberFormat.getNumberInstance();
-			String formattedPrice = formatter.format(book.getPRICE());
-			%>
-            <td><%=formattedPrice %>円</td>
-            <td><%=book.getISSUE_DATE() %></td>
-            <td><%=book.getCREATE_DATETIME() %></td>
-            <td><%=book.getUPDATE_DATETIME() %></td>
-        </tr>
-        <% } %>
-    </table>
-<% } %>
-</div>
-
-<div class="search">
-<h3>検索</h3>
-	<form class="search-form" action="BookSearchServlet" method="post">
+	<% List<BookDTO> bookList = (List<BookDTO>)request.getAttribute("bookList"); %>
+	<% String error = (String)request.getAttribute("error"); %>
+	<% String notFound = (String)request.getAttribute("notFound"); %>
+	<% if(notFound != null) { %>
+	<p><%=notFound %><a href="BookListServlet">一覧に戻る</a><br></p>
+	<% } else if(bookList == null || bookList.isEmpty()) { %>
+	<p><%=error %></p>
+	<% } else { %>
+		<table>
+	        <tr>
+	            <th>JANコード</th>
+	            <th>ISBNコード</th>
+	            <th>書籍名</th>
+	            <th>書籍名カナ</th>
+	            <th>価格</th>
+	            <th>発行日</th>
+	            <th>登録日時</th>
+	            <th>更新日時</th>
+	        </tr>
+	        <% for(BookDTO book : bookList) { %>
+	        <tr onclick="goToBookDetail('<%=book.getJAN_CODE()%>')">
+	            <td><%=book.getJAN_CODE() %></td>
+	            <td><%=book.getISBN_CODE() %></td>
+	            <td><%=book.getBOOK_NAME() %></td>
+	            <td><%=book.getBOOK_KANA_NM() %></td>
+	            <% 
+	            NumberFormat formatter = NumberFormat.getNumberInstance();
+				String formattedPrice = formatter.format(book.getPRICE());
+				%>
+	            <td><%=formattedPrice %>円</td>
+	            <td><%=book.getISSUE_DATE() %></td>
+	            <td><%=book.getCREATE_DATETIME() %></td>
+	            <td><%=book.getUPDATE_DATETIME() %></td>
+	        </tr>
+	        <% } %>
+	    </table>
+	<% } %>
+	</div>
+	
+	<div class="search">
+	<h3>検索</h3>
+		<form class="search-form" action="BookSearchServlet" method="post">
+			
+			<label>タイトル：</label>
+		    <input type="text" name="title" placeholder="タイトルで検索"><br>
 		
-		<label>タイトル：</label>
-	    <input type="text" name="title" placeholder="タイトルで検索"><br>
+		    <label>カナ名：</label>
+		    <input type="text" name="kana" placeholder="カナ名で検索"><br>
+		
+		    <label>価格：</label>
+		    <input type="text" name="price" placeholder="価格で検索"><br>
+		    
+			<button type="submit">検索</button>
+		 </form>
+		 
+	</div> 
 	
-	    <label>カナ名：</label>
-	    <input type="text" name="kana" placeholder="カナ名で検索"><br>
-	
-	    <label>価格：</label>
-	    <input type="text" name="price" placeholder="価格で検索"><br>
-	    
-		<button type="submit">検索</button>
-	 </form>
-	 
-</div> 
-
-<p class="attention">※書籍情報を編集、削除したい場合は各行をクリック</p>
-<a href="BookListServlet">一覧を表示</a>
+	<a href="BookExportServlet">書籍一覧をファイルに出力</a>
 
 <body>
 </html>
