@@ -32,8 +32,21 @@ public class BookExportServlet extends HttpServlet {
 			response.setHeader("Content-Length", String.valueOf(new File(filePath).length()));
 			
 			Files.copy(Paths.get(filePath), response.getOutputStream());
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch(ClassNotFoundException e) {
 			e.printStackTrace();
+			request.getSession().setAttribute("errorMessage", "クラスが見つかりませんでした。");
+	        response.sendRedirect("error.jsp");
+	        return;
+		} catch(SQLException e) {
+			e.printStackTrace();
+			request.getSession().setAttribute("errorMessage", "現在データベースにアクセスできません。");
+	        response.sendRedirect("error.jsp");
+	        return;
+		} catch(Exception e) {
+			e.printStackTrace();
+			request.getSession().setAttribute("errorMessage", "システムエラーが発生しました。");
+	        response.sendRedirect("error.jsp");
+	        return;
 		}
         
 
